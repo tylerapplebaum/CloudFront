@@ -5,9 +5,9 @@ param(
     [ValidateScript({Test-Path $_ -PathType 'Container'})]$LogDir
 )
 $LogArr = New-Object System.Collections.ArrayList
-$LogFilesRaw = Get-ChildItem $LogDir -Filter *.txt | Select-Object -ExpandProperty Name
+$LogFilesRaw = Get-ChildItem -Path $LogDir -Filter *.txt
     ForEach ($LogFileRaw in $LogFilesRaw) {
-        $LogContent = Get-Content $LogFileRaw  | Where-Object Length -gt 0 | Select-String -Pattern '#Version: 1.0|#Fields: ' -NotMatch #Filter out log file headers
+        $LogContent = Get-Content $LogFileRaw.Fullname | Where-Object Length -gt 0 | Select-String -Pattern '#Version: 1.0|#Fields: ' -NotMatch #Filter out log file headers
         ForEach ($LogEntry in $LogContent){
             $LogData = $LogEntry.Line.Split("`t") 
             $LogProperties = [Ordered]@{ #Null LogData is marked with a '-'
@@ -48,6 +48,6 @@ $LogFilesRaw = Get-ChildItem $LogDir -Filter *.txt | Select-Object -ExpandProper
             $LogObject = New-Object PSObject -Property $LogProperties
             $LogArr.Add($LogObject) | Out-Null
         }
-        $LogArr | Export-CSV -Path .\CloudFront-Logs-$(Get-Date -Format yyyy-MM-dd).csv -NoTypeInformation -Append
+        $LogArr | Export-CSV -Path $LogDir\CloudFront-Logs-$(Get-Date -Format yyyy-MM-dd).csv -NoTypeInformation -Append
     }
 } #End Process-AWSCloudFrontLogs
