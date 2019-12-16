@@ -14,4 +14,4 @@ ForEach ($LogFile in $LogFiles) {
 }
 ```
 
-The 'cs(User-Agent)' field is URL encoded twice for some reason, so we must [decode it twice](https://github.com/tylerapplebaum/CloudFront/blob/master/Process-AWSCloudFrontLogs.ps1#L24).
+The 'cs(User-Agent)' field is URL encoded twice for some reason, so we must [decode it twice](https://github.com/tylerapplebaum/CloudFront/blob/cb31839247acac7eea2a47c966dc426110d0dfc2/Process-AWSCloudFrontLogs.ps1#L24).
