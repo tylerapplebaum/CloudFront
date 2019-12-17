@@ -50,4 +50,5 @@ $LogFilesRaw = Get-ChildItem -Path $LogDir -Filter *.txt
         }
     }
     $LogArr | Sort-Object -Property date,time | Export-CSV -Path $LogDir\CloudFront-Logs-$(Get-Date -Format yyyy-MM-dd).csv -NoTypeInformation -Append
+    Return [void]$LogArr
 } #End Process-AWSCloudFrontLogs
