@@ -4,7 +4,7 @@ param(
     [Parameter(HelpMessage="Specify the path to the directory containing CloudFront log files in .txt format")]
     [ValidateScript({Test-Path $_ -PathType 'Container'})]$LogDir
 )
-$LogArr = New-Object System.Collections.ArrayList
+$script:LogArr = New-Object System.Collections.ArrayList
 $LogFilesRaw = Get-ChildItem -Path $LogDir -Filter *.txt
     ForEach ($LogFileRaw in $LogFilesRaw) {
         $LogContent = Get-Content $LogFileRaw.Fullname | Where-Object Length -gt 0 | Select-String -Pattern '#Version: 1.0|#Fields: ' -NotMatch #Filter out log file headers
@@ -48,6 +48,6 @@ $LogFilesRaw = Get-ChildItem -Path $LogDir -Filter *.txt
             $LogObject = New-Object PSObject -Property $LogProperties
             $LogArr.Add($LogObject) | Out-Null
         }
-        $LogArr | Export-CSV -Path $LogDir\CloudFront-Logs-$(Get-Date -Format yyyy-MM-dd).csv -NoTypeInformation -Append
     }
+    $LogArr | Sort-Object -Property date,time | Export-CSV -Path $LogDir\CloudFront-Logs-$(Get-Date -Format yyyy-MM-dd).csv -NoTypeInformation -Append
 } #End Process-AWSCloudFrontLogs
