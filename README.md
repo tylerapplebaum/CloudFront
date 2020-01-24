@@ -6,7 +6,7 @@ CloudFront stores log files in .gz format. This script expects extracted files w
 
 Use [ConvertFrom-Gzip.ps1](https://gallery.technet.microsoft.com/scriptcenter/ConvertFrom-GZip-edcbf6a9) to prepare the log files.
 
-```
+```powershell
 . ConvertFrom-Gzip.ps1
 $LogFiles = Get-ChildItem .\ -Filter *.gz | Select-Object -ExpandProperty Name
 ForEach ($LogFile in $LogFiles) {
